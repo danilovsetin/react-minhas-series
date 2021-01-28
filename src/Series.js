@@ -2,21 +2,21 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import { Redirect, Link } from 'react-router-dom'
 
-const Generos = () => {
+const Series = () => {
     const [data, setData] = useState([])
     const [novo, setNovo] = useState(false)
 
     useEffect(() => {
     axios
-        .get('/api/genres')
+        .get('/api/series')
         .then(res => {
         setData(res.data.data)
     })
     },[])
 
-    const deletarGenero = id => {
+    const deletarSerie = id => {
         axios
-            .delete("/api/genres/" + id)
+            .delete("/api/series/" + id)
             .then(res => {
                 const filtrado = data.filter(item => item.id !== id)
                 setData(filtrado)
@@ -29,35 +29,35 @@ const Generos = () => {
             <th scope="row">{record.id}</th>
             <td>{record.name}</td>            
             <td>
-                <button className="btn btn-danger" onClick={() => deletarGenero(record.id)}>Remover</button>
-                <Link to={'/generos/' + record.id} className="btn btn-warning ml-1">Editar</Link>
+                <button className="btn btn-danger" onClick={() => deletarSerie(record.id)}>Remover</button>
+                <Link to={'/series/' + record.id} className="btn btn-info ml-1">Info</Link>
             </td>
         </tr>)
     }
 
-    const novoGenero = () => {
+    const novaSerie = () => {
         setNovo(true)
     }
 
     if (novo) {
-        return (<Redirect to='/generos/novo' />)
+        return (<Redirect to='/series/novo' />)
     }
 
     if(data.length === 0){
         return (
             <div className="container">
-                <h1>Generos</h1>
+                <h1>Séries</h1>
                 <div className="alert alert-warning" role="alert">
-                    Não existem generos cadastrados.
+                    Não existem séries cadastradas.
                 </div>
-                <button type="button" onClick={novoGenero} className="btn btn-primary">Novo Genero</button>
+                <button type="button" onClick={novaSerie} className="btn btn-primary">Nova Série</button>
             </div>
         )
     }
 
     return (
         <div className="container">
-            <h1>Generos</h1>
+            <h1>Séries</h1>
             <table className="table table-dark">
                 <thead>
                     <tr>
@@ -70,9 +70,9 @@ const Generos = () => {
                     {data.map(res => renderizaLinha(res))}
                 </tbody>
             </table>
-            <button type="button" onClick={novoGenero} className="btn btn-primary">Novo Genero</button>
+            <button type="button" onClick={novaSerie} className="btn btn-primary">Nova Série</button>
         </div>
         )
   }
 
-export default Generos
+export default Series
